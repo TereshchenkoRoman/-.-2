@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ЯПЗТ.ЛР2</title>
+  <style>
+    :root{
+      --bg:#0b1220; --card:linear-gradient(180deg,#0f1724,#07102a); --muted:#94a3b8; --text:#e6eef8;
+      --accent:#4f46e5; --glass:rgba(255,255,255,0.03); --radius:8px; --gap:12px; --max:900px;
+      font-family:Inter,system-ui,Segoe UI,Roboto,Arial; font-size:13px;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);}
+    .wrap{max-width:var(--max);margin:20px auto;padding:16px;display:grid;gap:14px}
+    .card{background:var(--card);border:1px solid var(--glass);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;gap:8px}
+    .title{font-weight:700;font-size:14px;margin:0}
+    .desc{color:var(--muted);font-size:12px;margin:0}
+    .demo{margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    input,select,textarea,button,table{font:inherit}
+    .btn{padding:8px 12px;border-radius:8px;border:none;background:linear-gradient(90deg,var(--accent),#7c3aed);color:#fff;cursor:pointer}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:8px;color:var(--text)}
+    .chip{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
+    .tooltip-trigger{position:relative;display:inline-block}
+    .tooltip{position:absolute;left:50%;transform:translateX(-50%);top:calc(100% + 8px);background:#07102a;color:var(--text);padding:8px;border-radius:8px;font-size:12px;border:1px solid rgba(255,255,255,0.03);white-space:nowrap;display:none;z-index:20}
+    .switch{width:46px;height:26px;background:rgba(255,255,255,0.03);border-radius:999px;padding:4px;display:inline-grid;align-items:center;cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.02);text-align:left}
+    .tabs{display:flex;gap:6px}
+    .tab{padding:8px 12px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.03);cursor:pointer;color:var(--muted)}
+    .tab[aria-selected="true"]{background:linear-gradient(90deg,var(--accent),#7c3aed);color:#fff;box-shadow:0 6px 18px rgba(79,70,229,0.12)}
+    .dropdown{position:relative;display:inline-block}
+    .dropdown-list{position:absolute;left:0;top:calc(100% + 6px);min-width:200px;background:var(--card);border:1px solid var(--glass);border-radius:8px;padding:6px;display:none;z-index:30}
+    .dropdown-list button{display:block;width:100%;text-align:left;padding:8px;border-radius:6px;border:none;background:transparent;color:var(--text);cursor:pointer}
+    .k{font-family:monospace;background:#07102a;padding:2px 6px;border-radius:4px;border:1px solid rgba(255,255,255,0.03);font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app">
+
+    <section class="card" id="radio">
+      <div><div class="title">Radiobutton</div><div class="desc">Single-choice input grouped via name; Arrow/Space for keyboard navigation; use fieldset/legend for accessibility.</div></div>
+      <div class="demo">
+        <fieldset style="border:none;padding:0;margin:0">
+          <legend class="desc">Choose option</legend>
+          <label><input type="radio" name="opt" value="1" checked> Option 1</label>
+          <label><input type="radio" name="opt" value="2"> Option 2</label>
+          <label><input type="radio" name="opt" value="3"> Option 3</label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section class="card" id="checkbox">
+      <div><div class="title">Checkbox</div><div class="desc">Binary choice; supports indeterminate state for partial selection; toggle with Space.</div></div>
+      <div class="demo">
+        <label><input type="checkbox" id="cbA"> Checkbox A</label>
+        <label><input type="checkbox" id="cbB"> Checkbox B</label>
+        <button class="ghost" id="setInd">Toggle indeterminate on B</button>
+      </div>
+    </section>
+
+    <section class="card" id="textinput">
+      <div><div class="title">Text input</div><div class="desc">Single-line text field with label and inline validation; Enter to submit forms.</div></div>
+      <div class="demo">
+        <label style="display:flex;flex-direction:column;gap:6px"><span class="desc">Name</span><input id="txt" type="text" placeholder="Enter name" style="min-width:260px;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04)"></label>
+        <div class="desc" id="txtErr" style="display:none;color:#ef4444">Name required (2+ chars)</div>
+      </div>
+    </section>
+
+    <section class="card" id="tabs">
+      <div><div class="title">Tabs</div><div class="desc">Switch between panels; Arrow/Home/End for keyboard; aria-selected and aria-controls used.</div></div>
+      <div class="demo">
+        <div class="tabs" role="tablist" aria-label="Demo tabs">
+          <button class="tab" role="tab" aria-selected="true" data-tab="t1">Tab 1</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="t2">Tab 2</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="t3">Tab 3</button>
+        </div>
+      </div>
+      <div class="example" id="tabpanel" role="tabpanel">Tab 1 content</div>
+    </section>
+
+    <section class="card" id="button">
+      <div><div class="title">Button</div><div class="desc">Action trigger; use &lt;button&gt;; Enter/Space activates; show aria-busy for loading.</div></div>
+      <div class="demo">
+        <button class="btn" id="primaryBtn">Primary</button>
+        <button class="ghost" id="secondaryBtn">Secondary</button>
+        <button class="btn" id="loadBtn" aria-busy="false">Async Action</button>
+      </div>
+    </section>
+
+    <section class="card" id="label">
+      <div><div class="title">Text label</div><div class="desc">Non-interactive text used as field label or static description; keep concise.</div></div>
+      <div class="demo">
+        <div class="desc" id="staticLabel">Account holder: Олег</div>
+      </div>
+    </section>
+
+    <section class="card" id="link">
+      <div><div class="title">Link</div><div class="desc">Navigate or trigger action; use &lt;a href&gt; for navigation, role=button for action-like links; Enter activates.</div></div>
+      <div class="demo">
+        <a href="#txt" class="chip">Go to Name</a>
+        <a role="button" tabindex="0" id="actionLink" class="chip">Action link</a>
+      </div>
+    </section>
+
+    <section class="card" id="tooltip">
+      <div><div class="title">Tooltip</div><div class="desc">Short non-interactive hint; trigger on hover/focus; use aria-describedby to associate with element.</div></div>
+      <div class="demo">
+        <div class="tooltip-trigger" tabindex="0" id="tooltipTrigger">Hover or focus me
+          <div class="tooltip" role="tooltip" id="tt">Tooltip text</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="dropdown">
+      <div><div class="title">Dropdown list</div><div class="desc">Select one option from a list; native &lt;select&gt; or custom list with role=listbox; keyboard: Arrow/Enter/Escape.</div></div>
+      <div class="demo">
+        <select id="ddl" style="padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04)">
+          <option value="a">Option A</option>
+          <option value="b">Option B</option>
+          <option value="c">Option C</option>
+        </select>
+        <div class="dropdown" id="customDropdown" style="position:relative">
+          <button class="ghost" id="ddToggle" aria-expanded="false">Custom dropdown</button>
+          <div class="dropdown-list" id="ddList" role="listbox" tabindex="-1">
+            <button role="option" data-value="1">Custom 1</button>
+            <button role="option" data-value="2">Custom 2</button>
+            <button role="option" data-value="3">Custom 3</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="datagrid">
+      <div><div class="title">Data grid</div><div class="desc">Tabular data with sortable header; keyboard focusable headers and rows; use table or grid ARIA patterns for complex grids.</div></div>
+      <div class="example" style="overflow:auto">
+        <table role="table" aria-label="Users">
+          <thead><tr><th id="hName" tabindex="0" aria-sort="none">Name</th><th>Email</th><th>Role</th></tr></thead>
+          <tbody id="gridBody"><tr><td>Олег</td><td>oleg@example.com</td><td>Admin</td></tr><tr><td>Марія</td><td>maria@example.com</td><td>User</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    (function(){
+      document.body.addEventListener('keydown', function f(e){ if(e.key==='Tab'){ document.body.classList.add('focus-visible'); document.body.removeEventListener('keydown', f); }});
+
+      document.getElementById('setInd')?.addEventListener('click', function(){
+        const cb = document.getElementById('cbB');
+        cb.indeterminate = !cb.indeterminate;
+      });
+
+      const txt = document.getElementById('txt'), txtErr = document.getElementById('txtErr');
+      txt?.addEventListener('blur', ()=>{ if(txt.value.trim().length < 2){ txt.setAttribute('aria-invalid','true'); txtErr.style.display='block'; } else { txt.removeAttribute('aria-invalid'); txtErr.style.display='none'; } });
+
+      const tabs = Array.from(document.querySelectorAll('.tabs [role="tab"]'));
+      tabs.forEach((t,i)=>{ t.addEventListener('click', activate); t.addEventListener('keydown', nav); function activate(){ tabs.forEach(x=>x.setAttribute('aria-selected','false')); this.setAttribute('aria-selected','true'); document.getElementById('tabpanel').textContent = this.textContent + ' content'; } function nav(e){ let idx = tabs.indexOf(this); if(e.key==='ArrowRight'){ idx=(idx+1)%tabs.length; tabs[idx].focus(); } if(e.key==='ArrowLeft'){ idx=(idx-1+tabs.length)%tabs.length; tabs[idx].focus(); } if(e.key==='Home'){ tabs[0].focus(); } if(e.key==='End'){ tabs[tabs.length-1].focus(); } if(e.key==='Enter'||e.key===' '){ this.click(); } } });
+
+      document.getElementById('loadBtn')?.addEventListener('click', function(){
+        if(this.getAttribute('aria-busy')==='true') return;
+        this.setAttribute('aria-busy','true'); const orig=this.textContent; this.textContent='Loading…';
+        setTimeout(()=>{ this.setAttribute('aria-busy','false'); this.textContent=orig; },1200);
+      });
+
+      document.getElementById('actionLink')?.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showToast('Action link activated'); }});
+      document.getElementById('actionLink')?.addEventListener('click', ()=>showToast('Action link activated'));
+
+      const ttTrigger = document.getElementById('tooltipTrigger'), tt = document.getElementById('tt');
+      ttTrigger?.addEventListener('mouseenter', ()=> tt.style.display='block');
+      ttTrigger?.addEventListener('mouseleave', ()=> tt.style.display='none');
+      ttTrigger?.addEventListener('focus', ()=> tt.style.display='block');
+      ttTrigger?.addEventListener('blur', ()=> tt.style.display='none');
+
+      const ddToggle = document.getElementById('ddToggle'), ddList = document.getElementById('ddList');
+      ddToggle?.addEventListener('click', ()=>{ const open = ddToggle.getAttribute('aria-expanded') === 'true'; ddToggle.setAttribute('aria-expanded', String(!open)); ddList.style.display = open ? 'none' : 'block'; if(!open) ddList.focus(); });
+      ddList?.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ ddList.style.display='none'; ddToggle.setAttribute('aria-expanded','false'); ddToggle.focus(); } });
+      ddList?.querySelectorAll('button[role="option"]').forEach(b=> b.addEventListener('click', ()=>{ showToast('Selected ' + b.textContent); ddList.style.display='none'; ddToggle.setAttribute('aria-expanded','false'); }));
+
+      const hName = document.getElementById('hName'), gridBody = document.getElementById('gridBody');
+      hName?.addEventListener('click', function(){ const cur = this.getAttribute('aria-sort') || 'none'; const next = (cur==='none'||cur==='descending') ? 'ascending' : 'descending'; this.setAttribute('aria-sort', next); const rows = Array.from(gridBody.querySelectorAll('tr')); rows.sort((a,b)=> next==='ascending' ? a.cells[0].textContent.localeCompare(b.cells[0].textContent) : b.cells[0].textContent.localeCompare(a.cells[0].textContent)); gridBody.innerHTML=''; rows.forEach(r=>gridBody.appendChild(r)); });
+      hName?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') hName.click(); });
+
+      function showToast(msg){
+        const c = document.getElementById('toasts') || createToastContainer();
+        const el = document.createElement('div'); el.className='card'; el.style.minWidth='180px'; el.textContent = msg;
+        c.appendChild(el); setTimeout(()=> el.remove(), 3200);
+      }
+      function createToastContainer(){
+        const div = document.createElement('div'); div.id='toasts'; div.className='toasts'; document.body.appendChild(div); return div;
+      }
+    })();
+  </script>
+</body>
+</html>
